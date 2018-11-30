@@ -25,11 +25,7 @@
       <b-navbar-brand class="nav-title">GitHub User Search</b-navbar-brand>
       <b-navbar-toggle target="navbarsExampleDefault"></b-navbar-toggle>
 
-      <b-collapse
-        is-nav
-        class="collapse navbar-collapse"
-        id="navbarsExampleDefault"
-      >
+      <b-collapse is-nav class="collapse navbar-collapse" id="navbarsExampleDefault">
         <b-navbar-nav>
           <router-link class="navbar-brand" to="/">Home</router-link>
           <router-link class="navbar-brand" to="/about">About</router-link>
@@ -43,7 +39,7 @@
 
 <style lang="less">
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;

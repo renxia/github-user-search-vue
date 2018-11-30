@@ -26,7 +26,9 @@
           v-for="userName of userList"
           :key="userName"
           @click="setUserName(userName);"
-        >{{ userName }}</button>
+        >
+          {{ userName }}
+        </button>
       </div>
     </div>
 
@@ -39,57 +41,41 @@
           <div class="row">
             <div class="col-md-3">
               <img class="card-img-top" :src="user.avatar_url" />
-              <a
-                class="btn btn-primary btn-block view-profile"
-                target="_blank"
-                :href="user.html_url"
-                >View Profile</a>
+              <a class="btn btn-primary btn-block view-profile" target="_blank" :href="user.html_url">View Profile</a>
             </div>
             <div class="col-md-9">
               <div class="stats">
                 <a target="_blank" :href="user.html_url + '?tab=repositories'">
                   <button type="button" class="btn btn-primary">
-                    Public Repos
-                    <span class="badge badge-light">{{
-                      user.public_repos
-                    }}</span>
+                    Public Repos <span class="badge badge-light">{{ user.public_repos }}</span>
                   </button>
                 </a>
-                <button type="button" class="btn btn-info">
-                  Public Gists
-                  <span class="badge badge-light">{{ user.public_gists }}</span>
-                </button>
+
+                <a target="_blank" :href="'https://gist.github.com/' + username">
+                  <button type="button" class="btn btn-info">
+                    Public Gists <span class="badge badge-light">{{ user.public_gists }}</span>
+                  </button>
+                </a>
                 <a target="_blank" :href="user.html_url + '?tab=followers'">
                   <button type="button" class="btn btn-success">
-                    Followers
-                    <span class="badge badge-light">{{ user.followers }}</span>
+                    Followers <span class="badge badge-light">{{ user.followers }}</span>
                   </button>
                 </a>
                 <a target="_blank" :href="user.html_url + '?tab=following'">
                   <button type="button" class="btn btn-dark">
-                    Following
-                    <span class="badge badge-light">{{ user.following }}</span>
+                    Following <span class="badge badge-light">{{ user.following }}</span>
                   </button>
                 </a>
               </div>
 
               <ul class="list-group">
+                <li class="list-group-item"><strong>Username</strong> {{ user.login }}</li>
+                <li class="list-group-item"><strong>Location</strong> {{ user.location }}</li>
+                <li class="list-group-item"><strong>Email</strong> {{ user.email }}</li>
                 <li class="list-group-item">
-                  <strong>Username</strong> {{ user.login }}
+                  <strong>Blog</strong><a target="_blank" :href="user.blog"> {{ user.blog }}</a>
                 </li>
-                <li class="list-group-item">
-                  <strong>Location</strong> {{ user.location }}
-                </li>
-                <li class="list-group-item">
-                  <strong>Email</strong> {{ user.email }}
-                </li>
-                <li class="list-group-item">
-                  <strong>Blog</strong
-                  ><a target="_blank" :href="user.blog"> {{ user.blog }}</a>
-                </li>
-                <li class="list-group-item">
-                  <strong>Member Since</strong> {{ user.created_at }}
-                </li>
+                <li class="list-group-item"><strong>Member Since</strong> {{ user.created_at }}</li>
               </ul>
             </div>
           </div>
@@ -98,14 +84,53 @@
 
       <div class="card">
         <div class="card-header">
-          User Repositories ({{ user.public_repos }})
+          User Repositories ({{ reposTotalCount }})
+
+          <div class="query-select align-right">
+            <input
+              type="text"
+              placeholder="Search..."
+              class="form-control form-control-sm search"
+              @keyup.enter="getReoByPage(1);"
+              v-model="pager.q"
+            />
+            <select
+              class="form-control form-control-sm pagesize"
+              v-model="pager.pageSize"
+              @change="getReoByPage(1);"
+              :disabled="isLoading"
+            >
+              <option>10</option>
+              <option>30</option>
+              <option>50</option>
+              <option>100</option>
+            </select>
+
+            <select
+              class="form-control form-control-sm sort"
+              v-model="pager.sort"
+              @change="getReoByPage(1);"
+              :disabled="isLoading"
+            >
+              <option value="updated">updated</option>
+              <option value="stars">Stars</option>
+              <option value="forks">Forks</option>
+              <option value="">Best match</option>
+            </select>
+
+            <select
+              class="form-control form-control-sm direction"
+              v-model="pager.direction"
+              @change="getReoByPage(1);"
+              :disabled="isLoading"
+            >
+              <option value="desc">降序</option>
+              <option value="asc">升序</option>
+            </select>
+          </div>
         </div>
         <div class="card-body">
-          <div
-            class="alert alert-secondary"
-            v-for="(repo, idx) of repos"
-            :key="repo.html_url"
-          >
+          <div class="alert alert-secondary" v-for="(repo, idx) of repos" :key="repo.html_url">
             <div class="row">
               <div class="col-md-8">
                 <a target="_blank" :href="repo.html_url" :title="repo.full_name">
@@ -114,57 +139,30 @@
                 <p>{{ repo.description }}</p>
               </div>
               <div class="col-md-4 op-btn-list">
-                <a
-                  target="_blank"
-                  :href="repo.html_url + '/stargazers'"
-                  title="Stars"
-                >
+                <a target="_blank" :href="repo.html_url + '/stargazers'" title="Stars">
                   <button type="button" class="btn btn-success btn-sm">
-                    Stars
-                    <span class="badge badge-light">{{
-                      repo.stargazers_count
-                    }}</span>
+                    Stars <span class="badge badge-light">{{ repo.stargazers_count }}</span>
                   </button>
                 </a>
 
-                <a
-                  target="_blank"
-                  :href="repo.html_url + '/network/members'"
-                  title="Fork"
-                >
+                <a target="_blank" :href="repo.html_url + '/network/members'" title="Fork">
                   <button type="button" class="btn btn-info btn-sm">
-                    Forks
-                    <span class="badge badge-light">{{ repo.forks }}</span>
+                    Forks <span class="badge badge-light">{{ repo.forks }}</span>
                   </button>
                 </a>
 
-                <a
-                  target="_blank"
-                  :href="repo.html_url + '/issues'"
-                  title="Open Issues"
-                >
+                <a target="_blank" :href="repo.html_url + '/issues'" title="Open Issues">
                   <button type="button" class="btn btn-danger btn-sm">
-                    Issues
-                    <span class="badge badge-light">{{
-                      repo.open_issues
-                    }}</span>
+                    Issues <span class="badge badge-light">{{ repo.open_issues }}</span>
                   </button>
                 </a>
               </div>
             </div>
           </div>
 
-          <div
-            class="btn-toolbar pagination"
-            role="toolbar"
-            aria-label="Toolbar with button groups"
-          >
+          <div class="btn-toolbar pagination" role="toolbar" aria-label="Toolbar with button groups">
             <div class="page-size">
-              <select
-                class="form-control form-control-sm"
-                v-model="pager.pageSize"
-                @change="getReoByPage(1);"
-              >
+              <select class="form-control form-control-sm" v-model="pager.pageSize" @change="getReoByPage(1);">
                 <option>10</option>
                 <option>30</option>
                 <option>50</option>
@@ -180,7 +178,9 @@
                 class="btn btn-secondary"
                 :disabled="isLoading"
                 @click="getReoByPage(i + 1);"
-              >{{ i + 1 }}</button>
+              >
+                {{ i + 1 }}
+              </button>
             </div>
           </div>
         </div>
@@ -190,17 +190,15 @@
     <div class="tips-container" v-if="msgTip">
       <b-alert :show="!!msgTip" :variant="tipType">
         {{ msgTip }}
-        <button type="button" class="close" @click="msgTip = '';">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="close" @click="msgTip = '';"><span aria-hidden="true">&times;</span></button>
       </b-alert>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
-import { GithubService } from "../services/github.service";
+import { Component, Prop, Vue } from 'vue-property-decorator';
+import { GithubService } from '../services/github.service';
 
 @Component
 export default class Profile extends Vue {
@@ -209,20 +207,21 @@ export default class Profile extends Vue {
   user: any;
   username = 'lzwme';
   preUserName = '';
+  reposTotalCount = 0;
   repos: any[] = [];
   userList = [
-    "lzwme",
-    "renxia",
-    "fex-team",
-    "vuejs",
-    "angular",
-    "reactjs",
-    "facebook",
-    "microsoft",
-    "google",
-    "tencent",
-    "alibaba",
-    "baidu"
+    'lzwme',
+    'renxia',
+    'fex-team',
+    'vuejs',
+    'angular',
+    'reactjs',
+    'facebook',
+    'microsoft',
+    'google',
+    'tencent',
+    'alibaba',
+    'baidu',
   ];
 
   isLoading = false;
@@ -230,12 +229,15 @@ export default class Profile extends Vue {
 
   pager = {
     curPage: 0,
-    pageSize: 50
+    pageSize: 50,
+    sort: 'updated',
+    direction: 'desc',
+    q: '',
   };
 
   tipTimer;
   tipType;
-  msgTip = "";
+  msgTip = '';
 
   get pageList() {
     const page: number[] = [];
@@ -244,7 +246,7 @@ export default class Profile extends Vue {
       return page;
     }
 
-    const totalPage = Math.ceil(this.user.public_repos / this.pager.pageSize);
+    const totalPage = Math.ceil(this.reposTotalCount / this.pager.pageSize);
 
     for (let i = 0; i < totalPage; i++) {
       page.push(i);
@@ -260,7 +262,7 @@ export default class Profile extends Vue {
 
     this.user = false;
     this.searchUser();
-    window["profileComp"] = this;
+    window['profileComp'] = this;
   }
 
   searchUserTimer;
@@ -280,13 +282,11 @@ export default class Profile extends Vue {
         .then(
           user => {
             this.user = user;
+            this.reposTotalCount = user.public_repos;
           },
           error => {
             console.log(error);
-            this.showTips(
-              `[getUser][${username}][${error.status}] ` + error.statusText,
-              "danger"
-            );
+            this.showTips(`[getUser][${username}][${error.status}] ` + error.statusText, 'danger');
           }
         );
 
@@ -311,31 +311,30 @@ export default class Profile extends Vue {
     setTimeout(() => (this.isLoading = false), this.timeout);
 
     const username = this.username;
-    this.githubService.getRepositories(this.pager).then(
-      repos => {
+    // this.githubService.getRepositories(this.pager).then(
+    this.githubService.searchRepos(this.pager).then(
+      res => {
         this.isLoading = false;
-        if (Array.isArray(repos)) {
-          this.repos = repos;
-          this.showTips("done!");
+        if (res.items) {
+          this.reposTotalCount = res.total_count;
+          this.repos = res.items;
+          this.showTips('done!');
         }
       },
       error => {
         console.log(error);
         this.isLoading = false;
-        this.showTips(
-          `[getRepositories][${username}][${error.status}] ` + error.statusText,
-          "danger"
-        );
+        this.showTips(`[getRepositories][${username}][${error.status}] ` + error.statusText, 'danger');
       }
     );
   }
 
-  showTips(err, type: "success" | "warning" | "danger" | "info" = "success") {
-    this.msgTip = err || "";
+  showTips(err, type: 'success' | 'warning' | 'danger' | 'info' = 'success') {
+    this.msgTip = err || '';
     this.tipType = type;
 
     clearTimeout(this.tipTimer);
-    this.tipTimer = setTimeout(() => (this.msgTip = ""), 4500);
+    this.tipTimer = setTimeout(() => (this.msgTip = ''), 4500);
   }
 }
 </script>
@@ -372,6 +371,46 @@ export default class Profile extends Vue {
   button {
     margin-right: 3px;
     margin-bottom: 2px;
+  }
+}
+
+.query-select {
+  display: inline-flex;
+  min-width: 370px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+
+  select {
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+
+  .search {
+    min-width: 100px;
+  }
+
+  .pagesize {
+    width: 80px;
+  }
+
+  .sort {
+    width: 100px;
+  }
+
+  .direction {
+    width: 70px;
+  }
+
+  @media screen and (max-width: 768px) {
+    position: static;
+    min-width: auto;
+    flex-wrap: wrap;
+
+    input,
+    select {
+      margin-bottom: 3px;
+    }
   }
 }
 
