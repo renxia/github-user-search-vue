@@ -319,6 +319,9 @@ export default class Profile extends Vue {
           this.reposTotalCount = res.total_count;
           this.repos = res.items;
           this.showTips('done!');
+        } else if (Array.isArray(res)) {
+          this.repos = res;
+          this.reposTotalCount = this.user.public_repos;
         }
       },
       error => {

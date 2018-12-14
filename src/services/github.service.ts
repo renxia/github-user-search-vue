@@ -2,7 +2,7 @@
  * @Author: renxia
  * @Date: 2018-11-19 16:00:07
  * @LastEditors: gflizhiwen
- * @LastEditTime: 2018-11-30 11:44:21
+ * @LastEditTime: 2018-12-14 17:30:25
  * @Description: github api (https://developer.github.com/v3/repos/)
  */
 
@@ -51,6 +51,10 @@ export class GithubService {
       q: encodeURIComponent(params.q || ''),
     };
 
+    if (!params.q) {
+      return this.getRepositories(params);
+    }
+
     params.fork = true;
     opts.q += `+user:${this.username}+fork:${params.fork}`;
 
@@ -78,7 +82,7 @@ export class GithubService {
       return qs;
     }, '');
 
-    return fetch(this.baseUrl + this.username + '/repos?' + querystring).then(resp => resp.json());
+    return fetch(this.baseUrl + 'users/' + this.username + '/repos?' + querystring).then(resp => resp.json());
   }
 
   updateUser(username) {
