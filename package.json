@@ -10,7 +10,13 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit"
+    "test:unit": "vue-cli-service test:unit",
+    "pack": "npm run pack:builder",
+    "pack:packager": "npm run build && npm run electron:packager",
+    "pack:builder": "npm run build && npm run electron:builder",
+    "electron.build": "node electron/build-src.js --cli --env test",
+    "electron:packager": "node electron/electron-packager.js --env=test",
+    "electron:builder": "node electron/electron-builder.js --env=test"
   },
   "dependencies": {
     "bootstrap-vue": "^2.0.0-rc.11",
@@ -21,7 +27,7 @@
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
-    "@lzwme/simple-mock": "^1.0.0",
+    "@lzwme/simple-mock": "^1.0.1",
     "@types/jest": "^23.1.4",
     "@vue/cli-plugin-babel": "^3.1.1",
     "@vue/cli-plugin-eslint": "^3.1.5",
@@ -35,6 +41,11 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "co-body": "^6.0.0",
+    "electron-builder": "^20.38.3",
+    "electron-installer-dmg": "^2.0.0",
+    "electron-installer-windows": "^1.1.0",
+    "electron-osx-sign": "^0.4.11",
+    "electron-packager": "^13.0.1",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0-0",
     "less": "^3.0.4",

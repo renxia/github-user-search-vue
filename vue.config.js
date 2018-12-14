@@ -6,6 +6,7 @@ const proxyTarget = 'https://api.github.com/';
 const config = {
   baseUrl: '',
   assetsDir: 'resources',
+  outputDir: 'dist/webapp',
   // Links: https://webpack.js.org/configuration/dev-server/
   devServer: {
     open: true,

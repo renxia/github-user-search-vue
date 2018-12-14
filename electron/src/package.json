@@ -1,0 +1,16 @@
+{
+  "name": "appname",
+  "version": "__version__",
+  "main": "main.js",
+  "description": "Github User Search App",
+  "author": {
+    "name": "lzw.me",
+    "email": "webmaster@lzw.me"
+  },
+  "homepage": "https://lzw.me",
+  "license": "MIT",
+  "dependencies": {},
+  "appConfig": "__appConfig__",
+  "packEnv": "__packEnv__",
+  "env": "{\"NODE_ENV\":\"production\"}"
+}

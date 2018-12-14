@@ -44,6 +44,18 @@ yarn run lint
 yarn run test:unit
 ```
 
+### electron app(use electron-builder)
+
+```bash
+yarn run pack:builder
+```
+
+### electron app(use electron-packager)
+
+```bash
+yarn run pack:packager
+```
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
