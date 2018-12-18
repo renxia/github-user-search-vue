@@ -1,7 +1,7 @@
 /*
  * @Author: renxia
  * @Date: 2018-12-06 09:59:10
- * @LastEditTime: 2018-12-14 10:57:29
+ * @LastEditTime: 2018-12-18 08:44:15
  * @Description: CONFIG
  */
 
@@ -29,7 +29,7 @@ module.exports = {
     }
 
     if (!this.envList.includes(packEnv)) {
-      packEnv = 'test';
+      packEnv = 'lc';
     }
 
     return packEnv;

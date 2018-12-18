@@ -29,7 +29,7 @@ node electron-packager.js --env <env>
 ## 本地调试 Electron 脚本
 
 1. 把此目录下的 launch.json 拷贝到根目录的 .vscode 目录下
-2. 把根目录下的 package.json 的 main 属性值改成你要调试的 js 脚本文件路径
+2. 把根目录下的 package.json 的 main 属性值改成你要调试的 js 脚本文件路径(electron/src/main.js)
 3. 重启 VSCODE，然后再在 vscode 编辑器启动调试
 
 ## 参考链接

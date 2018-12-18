@@ -1,7 +1,7 @@
 /*
  * @Author: renxia
  * @Date: 2018-12-05 15:22:25
- * @LastEditTime: 2018-12-14 15:36:40
+ * @LastEditTime: 2018-12-18 08:53:27
  * @Description: 入口程序
  * @docs http://electronjs.org/docs
  */
@@ -13,7 +13,7 @@ const { app, BrowserWindow, Menu, dialog } = electron;
 const pkg = require('./package.json');
 const CFG = require('./electron.config');
 
-const BUILD_ENV = pkg.packEnv || 'test';
+const BUILD_ENV = CFG.getPackEnv(pkg.packEnv);
 const remoteDomain = CFG.domain[BUILD_ENV];
 let mainWindow;
 
@@ -84,21 +84,25 @@ function getMenuTpl() {
  */
 function loadUrl(win) {
   let entryUrl;
+  const opts = {};
 
   win = win || mainWindow;
-  if (pkg.appConfig && pkg.appConfig.useRemote) {
+  if (BUILD_ENV === 'lc' || (pkg.appConfig && pkg.appConfig.useRemote)) {
     entryUrl = remoteDomain + '?time=' + new Date().getTime();
-    win.loadURL(entryUrl, {
-      // extraHeaders: 'pragma: no-cache\n',
-    });
+
+    // 本地开发模式下禁用缓存
+    if (BUILD_ENV === 'lc') {
+      opts.extraHeaders = 'pragma: no-cache\n';
+    }
   } else {
     entryUrl = url.format({
       pathname: path.join(__dirname, 'app/index.html'),
       protocol: 'file:',
       slashes: true,
     });
-    win.loadURL(entryUrl);
   }
+
+  win.loadURL(entryUrl, opts);
 }
 /**
  * 初始化 mainWindow 内的事件监听
@@ -172,7 +176,7 @@ function createWindow() {
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 
   const { width, height } = electron.screen.getPrimaryDisplay().workAreaSize;
-  const iconPath = path.resolve(__dirname, './resources/app.png');
+  const iconPath = path.resolve(__dirname, './resources/common/app.png');
 
   // Create the browser window.
   mainWindow = new BrowserWindow({

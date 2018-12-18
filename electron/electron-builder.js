@@ -1,7 +1,7 @@
 /*
  * @Author: renxia
  * @Date: 2018-12-04 16:37:01
- * @LastEditTime: 2018-12-14 10:54:58
+ * @LastEditTime: 2018-12-18 09:11:13
  * @Description: 使用 electron-builder 打包 electron/src 下内容至 release/builder-gus-<env> 目录
  */
 
@@ -53,6 +53,7 @@ const opts = {
   nsis: {
     oneClick: false,
     perMachine: true,
+    allowElevation: true,
     allowToChangeInstallationDirectory: false,
     installerHeaderIcon: path.join(resDir, 'app_256x256.ico'),
     installerIcon: path.join(resDir, 'app_256x256.ico'),

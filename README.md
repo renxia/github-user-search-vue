@@ -11,7 +11,9 @@ clone 本项目
 ## Project setup
 
 ```bash
+npm i -g @vue/cli
 yarn run bootstrap
+
 yarn start
 # or
 start ./dev-start.bat
@@ -57,6 +59,15 @@ yarn run pack:packager
 ```
 
 ### Customize configuration
+
+```bash
+npm i -g @vue/cli
+// or
+yarn add -g @vue/cli
+
+vue ui
+```
+
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## More Links
