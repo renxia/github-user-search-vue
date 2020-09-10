@@ -22,3 +22,6 @@ yarn-error.log*
 *.sw*
 
 simple-mock-config.js
+
+package-lock.json
+yarn.lock
